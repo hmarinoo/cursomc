@@ -1,6 +1,5 @@
 package com.cursomc.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ public class CategoriaService {
 	
 	public Categoria findById(Integer id) {
 		Optional<Categoria> opt = catRep.findById(id);
-		return opt.orElse(null) ;
+		return opt.orElseThrow(() -> new ObjectNotFoundException("Objecto não encontrado")); 
 	}
 
 }
