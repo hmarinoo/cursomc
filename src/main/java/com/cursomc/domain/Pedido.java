@@ -1,8 +1,11 @@
 package com.cursomc.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Cascade;
@@ -20,7 +24,9 @@ import org.hibernate.annotations.Cascade;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-public class Pedido {
+public class Pedido implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +43,8 @@ public class Pedido {
 
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
-
+	@OneToMany(mappedBy="id.pedido")
+	private Set<ItemPedido> items = new HashSet<>();
 	public Pedido() {
 
 	}
@@ -88,6 +95,14 @@ public class Pedido {
 
 	public void setPagamento(Pagamento pagamento) {
 		this.pagamento = pagamento;
+	}
+	
+	public Set<ItemPedido> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<ItemPedido> items) {
+		this.items = items;
 	}
 
 	@Override

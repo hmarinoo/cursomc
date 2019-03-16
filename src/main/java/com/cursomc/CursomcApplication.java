@@ -13,6 +13,7 @@ import com.cursomc.domain.Cidade;
 import com.cursomc.domain.Cliente;
 import com.cursomc.domain.Endereco;
 import com.cursomc.domain.Estado;
+import com.cursomc.domain.ItemPedido;
 import com.cursomc.domain.Pagamento;
 import com.cursomc.domain.PagamentoComBoleto;
 import com.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.cursomc.repositories.CidadeRepository;
 import com.cursomc.repositories.ClienteRepository;
 import com.cursomc.repositories.EnderecoRepository;
 import com.cursomc.repositories.EstadoRepository;
+import com.cursomc.repositories.ItemPedidoRepsitory;
 import com.cursomc.repositories.PagamentoRepository;
 import com.cursomc.repositories.PedidoRepository;
 import com.cursomc.repositories.ProductRepository;
@@ -48,13 +50,16 @@ public class CursomcApplication implements CommandLineRunner {
 	private ClienteRepository cliRepo;
 	
 	@Autowired
-	private EnderecoRepository endRepo;
+	private EnderecoRepository enderecoRepo;
 	
 	@Autowired
-	private PedidoRepository pedRepo;
+	private PedidoRepository pedidoRepo;
 	
 	@Autowired
-	private PagamentoRepository pagtoRepo;
+	private PagamentoRepository pagamentoRepo;
+	
+	@Autowired
+	private ItemPedidoRepsitory itemPedidoRepo;
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	public static void main(String[] args) {
@@ -77,7 +82,7 @@ public class CursomcApplication implements CommandLineRunner {
 		p2.getCategorias().addAll(Arrays.asList(cat1,cat2));
 		p3.getCategorias().add(cat1);
 			
-		catRepo.saveAll(Arrays.asList(cat1,cat2));
+		catRepo.saveAll(Arrays.asList(cat1,cat2)); 
 		prodRepo.saveAll(Arrays.asList(p1,p2,p3));
 		
 		Estado est1 = new Estado(null,"Minas Gerais");
@@ -102,7 +107,7 @@ public class CursomcApplication implements CommandLineRunner {
 		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
 		
 		cliRepo.saveAll(Arrays.asList(cli1));
-		endRepo.saveAll(Arrays.asList(e1,e2));
+		enderecoRepo.saveAll(Arrays.asList(e1,e2));
 		
 		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
 		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 10:32"), cli1, e1);
@@ -115,9 +120,22 @@ public class CursomcApplication implements CommandLineRunner {
 		ped2.setPagamento(pagto2);
 		
 		cliRepo.saveAll(Arrays.asList(cli1));
-		endRepo.saveAll(Arrays.asList(e1,e2));
-		pedRepo.saveAll(Arrays.asList(ped1,ped2));
-		pagtoRepo.saveAll(Arrays.asList(pagto1,pagto2));
+		enderecoRepo.saveAll(Arrays.asList(e1,e2));
+		pedidoRepo.saveAll(Arrays.asList(ped1,ped2));
+		pagamentoRepo.saveAll(Arrays.asList(pagto1,pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, p1.getValue());
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, p3.getValue());
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, p2.getValue());
+		
+		ped1.getItems().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItems().addAll(Arrays.asList(ip3));
+		
+		p1.getItems().addAll(Arrays.asList(ip1));
+		p2.getItems().addAll(Arrays.asList(ip3));
+		p3.getItems().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepo.saveAll(Arrays.asList(ip1,ip2,ip3));
 	}
 
 }
