@@ -24,4 +24,9 @@ public class CategoriaService {
 		return catRep.save(categoria);
 	}
 
+	public Categoria update(Categoria categoria) {
+		findById(categoria.getId());
+		return catRep.save(categoria);
+	}
+
 }
