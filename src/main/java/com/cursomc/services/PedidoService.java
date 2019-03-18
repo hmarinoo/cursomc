@@ -6,22 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cursomc.domain.Categoria;
-import com.cursomc.repositories.CategoriaRepository;
+import com.cursomc.domain.Pedido;
+import com.cursomc.repositories.PedidoRepository;
 
 @Service
-public class CategoriaService {
+public class PedidoService {
 	
 	@Autowired
-	private CategoriaRepository catRep;
+	private PedidoRepository pedRep;
 	
-	public Categoria findById(Integer id) {
-		Optional<Categoria> opt = catRep.findById(id);
+	public Pedido findById(Integer id) {
+		Optional<Pedido> opt = pedRep.findById(id);
 		return opt.orElseThrow(() -> new ObjectNotFoundException("Objecto não encontrado")); 
-	}
-
-	public Categoria insert(Categoria categoria) {
-		categoria.setId(null);
-		return catRep.save(categoria);
 	}
 
 }

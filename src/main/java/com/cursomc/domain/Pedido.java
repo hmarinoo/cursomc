@@ -21,6 +21,7 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Cascade;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -31,6 +32,7 @@ public class Pedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date instant;
 
 	@ManyToOne
@@ -40,9 +42,12 @@ public class Pedido implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "endereco_de_entraga_id")
 	private Endereco enderecoDeEntrega;
-
+	
+	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
+	
+	
 	@OneToMany(mappedBy="id.pedido")
 	private Set<ItemPedido> items = new HashSet<>();
 	public Pedido() {
